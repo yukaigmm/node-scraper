@@ -39,29 +39,14 @@ let cycleScraper = (obj) => {
         makeConfigObj("nextConfig",scraperOrder).then((configObj)=>{
             whetherSiteEnd(configObj);
         });
-        
     })
 }
 
 // 判断是否进行登录验证操作
 let getStart = ()=>{
-    
-    // let loginInfo = config[siteName]['login'];
-    // if (loginInfo) {
-    //     // 只有当有登录需求时才引入登录模块，否则引入登录模块之后会一直有phantomjs进程，爬虫程序无法结束。
-    //     const login = require('./login/login.js')
-    //     login(loginInfo).then((cookieStr) => {
-    //         configObj = makeConfigObj(siteName, cookieStr);
-    //         cycleScraper(configObj);
-    //     }, (err) => {
-    //         console.log('网站登录异常，原因如下：' + err);
-    //     })
-    // } else {
         makeConfigObj(siteName,scraperOrder).then((configObj)=>{
             cycleScraper(configObj);
         });
-        
-    // }
 }
 
 getStart();

@@ -2,12 +2,17 @@ const Horseman = require("node-horseman");
 
 let horseman = new Horseman();
 // 获取登录网站的cookie，放在requestHeader中
+let count = 0;
 let login = (loginInfo) => {
     return new Promise((resolve, reject) => {
+        count++;
+        if(count == loginInfo["login_pass"].length){
+            count = 0;
+        }
         let agent = loginInfo['agent'];
         let LoginUrl = loginInfo['url'];
-        let username = loginInfo['username'];
-        let password = loginInfo['password'];
+        let username = loginInfo["login_pass"][count]['username'];
+        let password = loginInfo["login_pass"][count]['password'];
         let usernameSelector = loginInfo['username_css_selector'];
         let passwordSelector = loginInfo['password_css_selector'];
         let submitSelector = loginInfo['submit_css_selector'];

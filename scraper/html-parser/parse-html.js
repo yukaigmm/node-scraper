@@ -8,8 +8,10 @@ const parsePage = (configObj) => {
     let rowsRule = layerConfig.rules.rows;
     let colsRule = layerConfig.rules.columns;
     let prePageData = JSON.parse(JSON.stringify(configObj.pageData));
+    // console.log(prePageData)
 
     if (layerConfig.rules.type == "html") {
+        // console.log("-----------------")
         configObj.pageData = getHtmlData(pageContent, rowsRule, colsRule,prePageData);
     } else if (layerConfig.rules.type == "json") {
         configObj.pageData = getJsonData(pageContent, rowsRule, colsRule,prePageData)
@@ -21,12 +23,15 @@ const parsePage = (configObj) => {
 let getHtmlData = (pageContent, rowsRule, colsRule,prePageData) => {
     let doc = libxml.parseHtml(pageContent);
     let rowsLen = doc.find(rowsRule).length;
+    // console.log(rowsLen);
+    // console.log(rowsRule)
     let pageData = [];
     for (let i = 1; i <= rowsLen; i++) {
-        
         getHtmlColData(rowsRule,colsRule,doc,i,prePageData);
+
         // Object.assign()的参数，有相同属性时，后面对象属性值覆盖前面的
         data = JSON.parse(JSON.stringify(Object.assign({},prePageData)));
+        // console.log(data);
         pageData.push(data);
     }
     return pageData;
@@ -39,13 +44,16 @@ let getHtmlColData = (rowsRule,colsRule,doc,i,prePageData)=>{
     for (let colRule of colsRule) {
         // 判断rule是否需要拼接
         let fullRule = colRule.absolute == true?colRule.rule:rowsRule + "[" + i + "]" + colRule.rule;
+        // console.log(fullRule);
         let dataElement = doc.get(fullRule);
         if (colRule.rule_value_type == "attribute") {
             getAttr(prePageData, colRule, dataElement);
         } else if (colRule.rule_value_type == "text" && dataElement) {
             prePageData[colRule.name] = dataElement.text() ? dataElement.text() : colRule.default_value;
         }
+        // console.log(prePageData)
         // 设置录入数据库时查询数据是否重复的字段
+        // console.log(prePageData['diff_word'])
         if(colRule.diff_word == true && !(prePageData['diff_word'].includes(colRule.name))){
             prePageData['diff_word'].push(colRule.name);
         }

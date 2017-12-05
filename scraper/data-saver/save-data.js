@@ -7,12 +7,14 @@ const saveData = (configObj, connection) => {
                                 resolve(configObj)
                         })
                 } else if (configObj.layerConfig.order == "last") {
+                        
                         inputData(configObj, connection).then((res) => {
                                 resolve(configObj)
                         })
                 } else {
                         resolve(configObj)
                 }
+                // resolve(configObj)
         })
 
 }
@@ -40,9 +42,11 @@ let createTable = (configObj, connection) => {
 // 根据最后一层的pageData，判断录入数据的方式
 let inputData = (configObj, connection) => {
         return new Promise((resolve, reject) => {
+                
                 let dataArr = JSON.parse(JSON.stringify(configObj.pageData));
                 // console.log("本次数据录入行数为："+dataArr.length);
                 let count = 0;
+                // console.log(dataArr)
                 for (let data of dataArr) {
                         // console.log(data);
                         ifUpdate(connection, data).then((res) => {
@@ -109,7 +113,7 @@ let getDataString = (data, connection) => {
         let dataNameStr = '';
         let dataStr = '';
         for (let key in data) {
-                if (key != "diff_word") {
+                if (key != "diff_word" && !key.includes("pagination")) {
                         dataNameStr += key + ',';
                         dataStr += "'"+data[key] + "',"
                 }
