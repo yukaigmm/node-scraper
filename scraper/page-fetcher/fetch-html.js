@@ -9,10 +9,6 @@ let fetchHtml = (configObj) => {
         let params;
         if (configObj.layerConfig.request_type == "post") {
             let params = configObj.layerConfig.params;
-            // console.log(url);
-            // console.log(header);
-            // console.log(charset);
-            console.log(params);
             superagent
                 .post(url)
                 .set(header)
@@ -32,6 +28,8 @@ let fetchHtml = (configObj) => {
                     }
                 })
         } else {
+            // console.log(configObj)
+            console.log(url)
             superagent
                 .get(url)
                 .set(header)
@@ -47,6 +45,7 @@ let fetchHtml = (configObj) => {
                     } else {
                         if (res && res.text) {
                             configObj.pageContent = res.text;
+                            // console.log(configObj)
                             resolve(configObj);
                         } else {
                             reject("获取页面内容为空" + res)
@@ -54,9 +53,7 @@ let fetchHtml = (configObj) => {
                     }
                 })
         }
-
-
-    })
+  })
 };
 
 
